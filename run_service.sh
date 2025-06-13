@@ -1,11 +1,29 @@
-export OTEL_TRACES_EXPORTER=none
-export OTEL_METRICS_EXPORTER=none
-export OTEL_LOGS_EXPORTER=none
-export OTEL_JAVAAGENT_LOGGING=none
-export OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED=false
-export OTEL_INSTRUMENTATION_OPENTELEMETRY_API_ENABLED=true
-export OTEL_INSTRUMENTATION_OPENTELEMETRY_INSTRUMENTATION_ANNOTATIONS_ENABLED=true
-export JAVA_TOOL_OPTIONS="-javaagent:$(pwd)/opentelemetry-javaagent.jar"
+clear
+unset JAVA_TOOL_OPTIONS
+PROJECT_NAME="service"
+JAR_PATH="build/libs/${PROJECT_NAME}.jar"
+SHA_FILE="${PROJECT_NAME}.sha512"
 
-gradle assemble || exit 1
-java -jar ./build/libs/service.jar
+echo "Comparing hashes..."
+current_sha=$( \
+  find "service" -type f \
+  -exec sha512sum {} + \
+  | sort \
+  | sha512sum \
+  | awk '{print $1}' \
+)
+# Read stored SHA-1
+read -r stored_sha stored_file < "service/${SHA_FILE}"
+cd service
+if [[ "${current_sha}" != "${stored_sha}" ]]; then
+  echo "JAR changed (old: ${stored_sha}, new: ${current_sha}); rebuilding…"
+  ./gradlew assemble || exit 1
+  # Update the stored SHA-512
+  echo "${current_sha}  ${JAR_PATH}" > "${SHA_FILE}"
+else
+  echo "No changes detected; skipping build."
+fi
+
+echo "Launching app"
+java -jar "${JAR_PATH}"
+
