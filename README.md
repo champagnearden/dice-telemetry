@@ -14,7 +14,7 @@ This repository is a simple POC to integrate opentelemetry with log4j
 - sha512sum
 
 ### 2. OTLP HTTP Receiver (API)
-- python + pip ($\ge$3) 
+- python + pip ($\ge$ 3) 
 
 ### 3. Testing
 - curl (or wget)
