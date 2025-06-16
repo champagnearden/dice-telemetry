@@ -6,13 +6,13 @@ SHA_FILE="${PROJECT_NAME}.sha512"
 
 echo "Comparing hashes..."
 current_sha=$( \
-  find "service" -type f \
+  find "service/src" -type f \
   -exec sha512sum {} + \
   | sort \
   | sha512sum \
   | awk '{print $1}' \
 )
-# Read stored SHA-1
+# Read stored SHA-512
 read -r stored_sha stored_file < "service/${SHA_FILE}"
 cd service
 if [[ "${current_sha}" != "${stored_sha}" ]]; then

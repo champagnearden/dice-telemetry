@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OTLP HTTP receiver that listens on port 4318,
+OTLP HTTP receiver that listens on port 4000,
 parses incoming OTLP trace, log, and metric data,
 and appends each request as one JSON object per line
 to traces.jsonl, logs.jsonl, and metrics.jsonl respectively.
@@ -20,6 +20,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 class OTLPHandler(BaseHTTPRequestHandler):
     def _write_jsonl(self, filename: str, message) -> None:
         # Convert protobuf message to a Python dict, then to a compact JSON line
+        filename = "data/" + filename
         record = MessageToDict(message, preserving_proto_field_name=True)
         with open(filename, 'a', encoding='utf-8') as f:
             f.write(json.dumps(record))
