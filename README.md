@@ -45,19 +45,8 @@ Open a browser and go to [localhost:16686](http://localhost:16686)
 In the Service dropdown you should have `DiceTelemetry` or `TaskManager`, select it if not already selected.
 click on `Find Traces`
 
-And voil, 
+And voila, all the requests to `rolldice` appears !
 
-Go back to the second terminal (service) and you should see two lines:
-1. `2025-06-12T11:59:24.617+01:00  INFO 6199 --- [nio-8080-exec-1] otel.RollController : bob is rolling the dice: 3`
+If you have executed the python script, you can see in the tags of each request the player name under `Tags` > `player.name` and the result he/she got under `Tags` > `dice.result`.
 
-And in the first terminal (OTLP HTTP Receiver) you should see something like:
-- `2025-06-16 10:51:18,377 Received 1 spans`
-  `127.0.0.1 - - [16/Jun/2025 10:51:18] "POST /v1/traces HTTP/1.1" 200 -`
-- `2025-06-16 10:51:18,473 Received 1 log records`
-  `127.0.0.1 - - [16/Jun/2025 10:51:18] "POST /v1/logs HTTP/1.1" 200 -`
-- `2025-06-16 10:51:19,401 Received 3 metric points`
-  `127.0.0.1 - - [16/Jun/2025 10:51:19] "POST /v1/metrics HTTP/1.1" 200 -`
-
-These lines can be in a different order, but the most important hing is to see all the three of them.
-
-You can now explore the `Otel_API/data` folder and see all the logs metrics and traces snt by he service !
+If not then the player name is set to jack by default but you can still view the dice result.

@@ -16,6 +16,6 @@ public class TracerConfig {
   @Bean
   public Tracer tracer(OpenTelemetry openTelemetry) {
     // the name/version here shows up in your tracing backend
-    return openTelemetry.getTracer("Dice Telemetry", "1.0.0");
+    return openTelemetry.getTracer("DiceTelemetry", "1.0.0");
   }
 }
