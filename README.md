@@ -8,16 +8,7 @@
 This repository is a simple POC to integrate opentelemetry with log4j
 
 ## Prerequisites
-### 1. Service
-- Java 8+ (21.0.4)
-- Gradle
-- sha512sum
-
-### 2. OTLP HTTP Receiver (API)
-- python + pip ($\ge$ 3) 
-
-### 3. Testing
-- curl (or wget)
+- docker
 
 ## How to run
 ### 1. OpenTelemetry Receiver

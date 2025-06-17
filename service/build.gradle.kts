@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "com.demo"
-java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
   mavenCentral()
@@ -20,6 +19,7 @@ dependencyManagement {
 }
 
 dependencies {
+
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   runtimeOnly("com.h2database:h2")
@@ -29,6 +29,9 @@ dependencies {
   implementation("io.opentelemetry:opentelemetry-exporter-otlp")
   implementation("io.opentelemetry:opentelemetry-sdk-metrics")
   implementation("io.opentelemetry:opentelemetry-sdk-logs")
+
+  implementation("org.opensearch.plugin:telemetry-otel:3.0.0")
+  implementation("org.opensearch:opensearch:3.0.0")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
