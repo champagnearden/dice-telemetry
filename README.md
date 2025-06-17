@@ -41,11 +41,19 @@ done
 ```
 
 ### 3. See the results
-Open a browser and go to [localhost:16686](http://localhost:16686)
-In the Service dropdown you should have `DiceTelemetry` or `TaskManager`, select it if not already selected.
-click on `Find Traces`
+#### 3.1. Jaeger
+- Open a browser and go to [localhost:16686](http://localhost:16686)
+- In the Service dropdown you should have `DiceTelemetry` or `TaskManager`, select it if not already selected.
+- Click on `Find Traces`
 
 And voila, all the requests to `rolldice` appears !
+
+#### 3.2. Zipkin
+- Open a browser and go to [localhost:9411/zipkin/](http://localhost:9411/zipkin/)
+- Click on `RUN QUERY`
+- Expand one line bu clicking on the arrow on the left
+- To see the details about this request click on `SHOW`
+- Explore and see the `dice.result` and `player.name` in the span named `rolldiceoperation`
 
 If you have executed the python script, you can see in the tags of each request the player name under `Tags` > `player.name` and the result he/she got under `Tags` > `dice.result`.
 

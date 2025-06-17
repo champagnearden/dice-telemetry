@@ -24,7 +24,6 @@ public class SafeOtlpExporter implements SpanExporter {
     try {
       return delegate.export(spans);
     } catch (Exception e) {
-      System.err.println("✅ SafeOtlpExporter caught: " + e.getMessage());
       logger.error("Unable to export {} spans to OTLP endpoint: {}", spans.size(), e.getMessage());
       return CompletableResultCode.ofFailure();
     }

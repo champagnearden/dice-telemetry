@@ -6,6 +6,11 @@ services:
       - "14250:14250"
       - "14268:14268"
 
+  zipkin:
+    image: openzipkin/zipkin:2.25
+    ports:
+      - "9411:9411"     # Zipkin HTTP API & UI
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.80.0
     command: ["--config=/etc/otel-collector-config.yaml"]
