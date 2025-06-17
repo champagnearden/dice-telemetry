@@ -9,44 +9,43 @@ This repository is a simple POC to integrate opentelemetry with log4j
 
 ## Prerequisites
 - docker
+- python *(optionnal)*
 
 ## How to run
 ### 1. OpenTelemetry Receiver
-Clone this repository and go in `dice-telemetry` folder then run:
+Clone this repository and go in `dice-telemetry/docker` folder then run:
 ```shell
-chmod +x run_api.sh
-./run_api.sh
+docker compose up --build
 ```
-This script will automatically install the required python dependencies and run the *OTLP HTTP receiver* on port **4000**
-It will also create and/or tail three files under `Otel_API/data/`.
-These are the data sent by services on the different routes:
+**For MacOs and Windows users**, make sure that docker desktop is launched and correct permission have been granted !
 
-| Route | File |
-| ----- | ---- |
-| `/v1/logs` | `logs.jsonl` |
-| `/v1/metrics` | `metrics.jsonl` |
-| `/v1/traces` | `traces.jsonl` |
+Build can take up to one minute
 
-### 2. Example service
-In a second terminal, run the following command:
+This will automatically install and build the project
+
+### 2. Generate traces
+In a second terminal, go in the root folder of the project
+
+In each case, the scripts will generate one request per second. We will let those run for about a minute to have some information to display in the [Jaeger](https://www.jaegertracing.io/) UI
+#### 2.1. If you have python installed (better)
 ```shell
-chmod +x run_service.sh
-./run_service.sh
+pip install -r requirements.txt 
+python test_service/generate_trafic.py
 ```
-This will generate a hash of the `service` folder and compare it to the one stored in `service.sha512`.
-If the hashes are different, it means that a change has been made in the **JAVA** files, so the script will launch a new gradle build (`gradle assemble`).
-*The script won't consider any change in the `build.gradle.kts` file.*
-
-Wait for the following line to show up:
-
-`2025-06-12T09:31:50.118+01:00  INFO 2946 --- [main] otel.DiceApplication : Started DiceApplication in 1.933 seconds (process running for 8.238)`
-
-### 3. Test it
-Then, in a third terminal, run:
+#### 2.2. If you haven't python installed
 ```shell
-curl "localhost:8080/rolldice?player=bob"
+while : ; do
+  curl "http://localhost:8080/rolldice?player=jack"
+  sleep 1
+done
 ```
-A random number appears
+
+### 3. See the results
+Open a browser and go to [localhost:16686](http://localhost:16686)
+In the Service dropdown you should have `DiceTelemetry` or `TaskManager`, select it if not already selected.
+click on `Find Traces`
+
+And voil, 
 
 Go back to the second terminal (service) and you should see two lines:
 1. `2025-06-12T11:59:24.617+01:00  INFO 6199 --- [nio-8080-exec-1] otel.RollController : bob is rolling the dice: 3`
