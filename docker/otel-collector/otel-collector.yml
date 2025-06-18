@@ -20,6 +20,12 @@ exporters:
       Content-Type: "application/x-ndjson"
       # Authorization: "Bearer ${APM_SECRET_TOKEN}"
 
+  elasticsearch/logs:
+    endpoint: "http://elasticsearch:9200"
+
+  elasticsearch/metrics:
+    endpoint: "http://elasticsearch:9200"
+
 service:
   telemetry:
     logs:
@@ -33,4 +39,13 @@ service:
         - otlp/jaeger
         - zipkin
         - otlphttp/apm
-
+    logs:
+      receivers:
+        - otlp
+      exporters:
+        - elasticsearch/logs
+    metrics:
+      receivers:
+        - otlp
+      exporters:
+        - elasticsearch/metrics
