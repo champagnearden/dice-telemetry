@@ -1,6 +1,7 @@
 from time import sleep, strftime
 from requests import get, RequestException
 from faker import Faker
+from sys import argv
 
 fake = Faker()
 success = 0
@@ -18,10 +19,12 @@ def call_rolldice():
         fail+=1
 
 if __name__ == "__main__":
+    seconds = int(argv[1]) if len(argv) > 1 else 1
+    print("A request will be sent every {} seconds".format(seconds))
     try:
         while True:
             call_rolldice()
-            sleep(1)
+            sleep(seconds)
     except KeyboardInterrupt:
         print(f"\n{success} successful requests")
         print(f"{fail} failed requests")

@@ -1,0 +1,19 @@
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+server.host: "0.0.0.0"
+server.name: "kibana-demo"
+telemetry.optIn: false
+
+# Only ERROR-level logs
+logging.root.level: error
+logging.appenders:
+  console:
+    type: console
+    layout:
+      type: pattern
+      pattern: "[%level] %logger - %message"
+# ─────────────────────────────────────────────────────────────
+
+# THIS IS THE MAGIC LINE:
+# Provide a 32-character minimum key for Kibana's Encrypted Saved Objects
+xpack.encryptedSavedObjects.encryptionKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90"
+

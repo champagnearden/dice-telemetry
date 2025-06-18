@@ -1,0 +1,6 @@
+-DrootLogger.level=ERROR
+-Dlogging.level=error
+-Dlogger.org.elasticsearch=ERROR
+-Dlogger.org.elasticsearch.plugins=ERROR
+-Dlogger.org.apache.lucene=ERROR
+-Dlogger.org.xpack=ERROR

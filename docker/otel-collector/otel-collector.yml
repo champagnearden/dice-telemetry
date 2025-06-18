@@ -1,0 +1,36 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+        endpoint: "0.0.0.0:4318"
+
+exporters:
+  otlp/jaeger:
+    endpoint: "jaeger:4317"
+    tls:
+      insecure: true
+
+  zipkin:
+    endpoint: "http://zipkin:9411/api/v2/spans"
+
+  otlphttp/apm:
+    endpoint: "http://apm-server:8200"
+    headers:
+      Content-Type: "application/x-ndjson"
+      # Authorization: "Bearer ${APM_SECRET_TOKEN}"
+
+service:
+  telemetry:
+    logs:
+      level: error
+
+  pipelines:
+    traces:
+      receivers:
+        - otlp
+      exporters:
+        - otlp/jaeger
+        - zipkin
+        - otlphttp/apm
+

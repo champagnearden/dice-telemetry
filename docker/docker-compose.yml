@@ -1,24 +1,66 @@
 services:
-  jaeger:
-    image: jaegertracing/all-in-one:1.50
-    ports:
-      - "16686:16686"
-      - "14250:14250"
-      - "14268:14268"
-
   zipkin:
-    image: openzipkin/zipkin:2.25
+    image: openzipkin/zipkin:3@sha256:377017bb389d7f38206f3a019f2330ab071cc0ab485fe496812cb3990d6fa662
     ports:
       - "9411:9411"     # Zipkin HTTP API & UI
 
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.80.0
-    command: ["--config=/etc/otel-collector-config.yaml"]
+  elasticsearch:
+    image: elastic/elasticsearch:9.0.2@sha256:d0c9c73a41b291bd39be4b531189c95460a10f19dc5531c76561306de1fc138b
     volumes:
-      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - ./elasticsearch/logging.options:/usr/share/elasticsearch/config/jvm.options.d/logging.options:ro
+      - ./elasticsearch/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.monitoring.collection.enabled=true
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: elastic/kibana:9.0.2@sha256:3bb79301345e585c141af613a6d0c4d743a2e4febfbdb8ffeb47e1514f2f86cf
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    environment:
+      - ELASTIC_APM_ACTIVE=false
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  apm-server:
+    image: elastic/apm-server:9.0.2@sha256:d0196845521136739f204becfd7e2489bb31ed540c19f34f01b044adaef0d07d
+    volumes:
+      - ./apm-server/apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
+    ports:
+      - "8200:8200"
+    depends_on:
+      - kibana
+      - elasticsearch
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.128.0@sha256:5b80030b740fa83bc9fd2c074a59c2e45a9f99689a98c71e3f9f8eabc0e441cb
+    volumes:
+      - ./otel-collector/otel-collector.yml:/etc/otel-collector-config.yaml:ro
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    depends_on:
+      - apm-server
+    ports:
+      - "4318:4318"
+
+  jaeger:
+    image: jaegertracing/jaeger:2.7.0@sha256:159abb21ab172304505a950b6b8f335644a2a2ef0506ffd1e442720b4f2e0687
+    environment:
+      - LOG_LEVEL=error
+      - ZAP_LOG_LEVEL=error
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
     ports:
       - "4317:4317"
-      - "4318:4318"
+      - "16686:16686"
+      - "14250:14250"
+      - "14268:14268"
+    depends_on:
+      - otel-collector
 
   dice-telemetry:
     build:

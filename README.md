@@ -30,8 +30,9 @@ In each case, the scripts will generate one request per second. We will let thos
 #### 2.1. If you have python installed (better)
 ```shell
 pip install -r requirements.txt 
-python test_service/generate_trafic.py
+python test_service/generate_trafic.py 5
 ```
+`5` is the timeout in seconds, so here it will send a request every 5 seconds.
 #### 2.2. If you haven't python installed
 ```shell
 while : ; do
@@ -54,6 +55,14 @@ And voila, all the requests to `rolldice` appears !
 - Expand one line bu clicking on the arrow on the left
 - To see the details about this request click on `SHOW`
 - Explore and see the `dice.result` and `player.name` in the span named `rolldiceoperation`
+
+#### 3.3. ElasticSearch APM *(Kibana)*
+- Open a browser and go to [localhost:5601/app/apm](http://localhost:5601/app/apm)
+- Click on your service
+- Got to the `Transactions` tab
+- Scroll down to `GET /rolldice` and click on it
+- Click on `rollDiceOperation`
+- You should see the player name under `labels.player_name` and the dice result under `numeric_labels.dice_result`
 
 If you have executed the python script, you can see in the tags of each request the player name under `Tags` > `player.name` and the result he/she got under `Tags` > `dice.result`.
 

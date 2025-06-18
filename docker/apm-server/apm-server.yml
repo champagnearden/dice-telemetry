@@ -1,0 +1,34 @@
+apm-server:
+  host: "0.0.0.0:8200"
+  otlp:
+    enabled: true
+    protocols:
+      http: true
+      grpc: true
+
+# Logging section to force ERROR+
+logging:
+  level: error
+
+# Your template & output settings…
+setup:
+  template:
+    enabled: true
+  ilm:
+    enabled: true
+
+agent:
+  config:
+    cache:
+      enabled: false
+
+output:
+  elasticsearch:
+    hosts:
+     - "http://elasticsearch:9200"
+    health_check:
+      enabled: true
+      timeout: 30s
+
+setup.kibana:
+  host: "http://kibana:5601"
