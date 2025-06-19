@@ -1,13 +1,17 @@
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
 receivers:
   otlp:
     protocols:
       grpc:
       http:
-        endpoint: "0.0.0.0:4318"
+        endpoint: 0.0.0.0:4318
 
 exporters:
   otlp/jaeger:
-    endpoint: "jaeger:4317"
+    endpoint: "http://jaeger:4317"
     tls:
       insecure: true
 
@@ -27,6 +31,7 @@ exporters:
     endpoint: "http://elasticsearch:9200"
 
 service:
+  extensions: [ health_check ]
   telemetry:
     logs:
       level: error

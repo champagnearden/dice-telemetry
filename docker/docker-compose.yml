@@ -40,24 +40,24 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.128.0@sha256:5b80030b740fa83bc9fd2c074a59c2e45a9f99689a98c71e3f9f8eabc0e441cb
     volumes:
-      - ./otel-collector/otel-collector.yml:/etc/otel-collector-config.yaml:ro
-    command: ["--config=/etc/otel-collector-config.yaml"]
+      - ./otel-collector/otel-collector.yml:/etc/otel-collector.yaml:ro
+    command: ["--config=/etc/otel-collector.yaml"]
     depends_on:
       - apm-server
     ports:
-      - "4318:4318"
+      - "4317:4317" # grpc
+      - "4318:4318" # http
+      - "13133:13133" # health check
 
   jaeger:
     image: jaegertracing/jaeger:2.7.0@sha256:159abb21ab172304505a950b6b8f335644a2a2ef0506ffd1e442720b4f2e0687
     environment:
-      - LOG_LEVEL=error
-      - ZAP_LOG_LEVEL=error
+      - JAEGER_VESION=2.0.0
       - JAEGER_SAMPLER_TYPE=const
       - JAEGER_SAMPLER_PARAM=1
     ports:
-      - "4317:4317"
       - "16686:16686"
-      - "14250:14250"
+      - "14250:4317" # because of jaeger agent we have to do this, see https://www.jaegertracing.io/docs/2.7/architecture/apis/#write-apis
       - "14268:14268"
     depends_on:
       - otel-collector
@@ -68,8 +68,14 @@ services:
       dockerfile: ../docker/Dockerfile
     image: dice-telemetry-app
     environment:
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
       OTEL_TRACES_EXPORTER: "otlp"
+      OTEL_LOGS_EXPORTER: "otlp"
+      OTEL_METRICS_EXPORTER: "otlp"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otel-collector:4318/v1/traces"
+      OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: "http://otel-collector:4318/v1/logs"
+      OTEL_EXPORTER_OTLP_LOGS_ENDPOINT: "http://otel-collector:4318/v1/metrics"
+      OTEL_EXPORTER_OTLP_CONTENT_TYPE: application/x-protobuf
+      OTEL_EXPORTER_OTLP_CONTENT_ENCODING: otlp_proto
     ports:
       - "8080:8080"
     depends_on:
