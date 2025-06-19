@@ -44,7 +44,7 @@ done
 ### 3. See the results
 #### 3.1. Jaeger
 - Open a browser and go to [localhost:16686](http://localhost:16686)
-- In the Service dropdown you should have `DiceTelemetry` or `TaskManager`, select it if not already selected.
+- In the Service dropdown you should have `DiceTelemetry`, select it if not already selected.
 - Click on `Find Traces`
 
 And voila, all the requests to `rolldice` appears !
