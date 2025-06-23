@@ -19,6 +19,3 @@ service/gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-
-# log files generted by python API
-Otel_API/*.jsonl
