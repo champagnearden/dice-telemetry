@@ -4,6 +4,8 @@ WORKDIR /home/gradle/project
 
 # Copy everything and build
 COPY . .
+
+RUN ./gradlew clean
 RUN ./gradlew assemble --no-daemon
 
 # Stage 2: run the app

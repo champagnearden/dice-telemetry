@@ -25,6 +25,8 @@ dependencies {
   runtimeOnly("com.h2database:h2")
 
   implementation("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
+
+  implementation("io.opentelemetry:opentelemetry-extension-annotations")
   implementation("io.opentelemetry:opentelemetry-extension-trace-propagators")
   implementation("io.opentelemetry:opentelemetry-exporter-otlp")
   implementation("io.opentelemetry:opentelemetry-sdk-metrics")

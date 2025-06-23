@@ -40,6 +40,20 @@ while : ; do
   sleep 1
 done
 ```
+### Use built-in script
+Instead of launching these commands, you just have to run the script named `run_app.sh`.
+It will:
+- Launch python script in background
+- Build dice-telemetry app with most recent code (no cache issue)
+- Build and launch all the containers
+
+If stopped (Ctrl+C), the script will automatically kill python script and erase the volumes
+
+To run this script, you have to allow yourself to run it and then launch it:
+```shell
+chmod +x run_app.sh
+./run_app.sh
+```
 
 ### 3. See the results
 #### 3.1. Jaeger
@@ -67,3 +81,4 @@ And voila, all the requests to `rolldice` appears !
 If you have executed the python script, you can see in the tags of each request the player name under `Tags` > `player.name` and the result he/she got under `Tags` > `dice.result`.
 
 If not then the player name is set to jack by default but you can still view the dice result.
+
