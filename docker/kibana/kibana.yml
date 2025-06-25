@@ -17,3 +17,4 @@ logging.appenders:
 # Provide a 32-character minimum key for Kibana's Encrypted Saved Objects
 xpack.encryptedSavedObjects.encryptionKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90"
 
+xpack.uptime.enabled: true

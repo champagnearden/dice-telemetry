@@ -37,6 +37,16 @@ services:
       - kibana
       - elasticsearch
 
+  heartbeat:
+    image: elastic/heartbeat:9.0.2@sha256:64d1d3bd5b976a89063ba78bcb04f535440159524f180173f47314ed8fd2a319
+    container_name: heartbeat
+    # Load a small heartbeat config
+    volumes:
+      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
+    depends_on:
+      - elasticsearch
+    restart: always
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.128.0@sha256:5b80030b740fa83bc9fd2c074a59c2e45a9f99689a98c71e3f9f8eabc0e441cb
     volumes:

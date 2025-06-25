@@ -1,0 +1,24 @@
+logging.level: error
+
+heartbeat.monitors:
+  - type: http
+    name: "APM Server Health"
+    # polling interval
+    schedule: '@every 10s'
+    # the APM Server health endpoint
+    urls: ["http://apm-server:8200/"]
+    # only consider HTTP 200 OK as healthy
+    check.response.status: 200
+
+  - type: http
+    name: "OTel Collector Health"
+    schedule: '@every 10s'
+    urls: ["http://otel-collector:13133/health"]
+    check.response.status: 200
+
+output.elasticsearch:
+  # point at your ES
+  hosts: ["http://elasticsearch:9200"]
+  # if you have security on:
+  # username: "elastic"
+  # password: "changeme"
