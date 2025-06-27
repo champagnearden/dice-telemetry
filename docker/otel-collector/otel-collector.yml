@@ -41,9 +41,9 @@ service:
       receivers:
         - otlp
       exporters:
-        - otlp/jaeger
+        #- otlp/jaeger
         - zipkin
-        - otlphttp/apm
+        #- otlphttp/apm
     logs:
       receivers:
         - otlp
